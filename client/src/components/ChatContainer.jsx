@@ -14,11 +14,11 @@ export default function ChatContainer({ selectedUser, setSelectedUser }) {
 
     return selectedUser ?
         (
-            <div className='h-full overflow-scroll relative backdrop-blur-lg'>
+            <div className='h-full flex flex-col h-full overflow-hidden relative backdrop-blur-lg'>
 
                 {/* Header  */}
 
-                <div className='flex items-center gap-3 py-3 mx-4 border-b border-stone-500'>
+                <div className='flex items-center gap-3 py-3 max-4 border-b border-stone-500'>
                     <img src={assets.profile_martin} alt=""
                         className='w-8 rounded-full'
                     />
@@ -30,7 +30,7 @@ export default function ChatContainer({ selectedUser, setSelectedUser }) {
                         onClick={() => setSelectedUser(null)}
                         src={assets.arrow_icon}
                         alt="arrow_icon"
-                        className='md:hidden mx-w-7'
+                        className='md:hidden max-w-7'
                     />
                     <img
                         src={assets.help_icon}
@@ -40,7 +40,7 @@ export default function ChatContainer({ selectedUser, setSelectedUser }) {
                 </div>
                 {/* Chat Area  */}
 
-                <div className='flex flex-col h-[calc(100% - 120px)] overflow-y-scroll p-3 pb-6'>
+                <div className='flex flex-col h-[calc(100% - 120px)] overflow-y-scroll p-3 pb-6 mb-5'>
                     {
                         messagesDummyData.map((msg, index) => (
                             <div key={index} className={`flex item-end gap-2 justify-end ${msg.senderId !== '680f50e4f10f3cd28382ecf9' && 'flex-row-reverse'}`}>
