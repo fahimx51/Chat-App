@@ -10,6 +10,15 @@ export default function LoginPage() {
     const [bio, setBio] = useState("");
     const [isSubmitted, setIsSubmitted] = useState(false);
 
+    const handleSubmitHandler = (e) => {
+        e.preventDefault();
+        if (currState === "Sign Up" && !isSubmitted) {
+            setIsSubmitted(true);
+            return;
+        }
+        
+    }
+
     return (
         <div className='min-h-screen bg-cover bg-center flex items-center justify-center gap-8 sm:justify-evenly max-sm:flex-col backdrop-blur-2xl'>
 
@@ -21,14 +30,23 @@ export default function LoginPage() {
             />
 
             {/* right */}
-            <form className='w-100 bg-white/8 text-white border-gray-500 p-6 flex flex-col gap-6 rounded-lg shadow-lg'>
+            <form
+                onSubmit={handleSubmitHandler}
+                className='w-100 bg-white/8 text-white border-gray-500 p-6 flex flex-col gap-6 rounded-lg shadow-lg'
+            >
                 <h2 className='font-medium text-2xl flex justify-between items-center'>
                     {currState}
-                    <img
-                        src={assets.arrow_icon}
-                        alt=""
-                        className='w-5 cursor-pointer'
-                    />
+                    {
+                        isSubmitted
+                        &&
+                        <img
+                            onClick={() => setIsSubmitted(false)}
+                            src={assets.arrow_icon}
+                            alt=""
+                            className='w-5 cursor-pointer'
+                        />
+
+                    }
 
                 </h2>
 
@@ -71,7 +89,7 @@ export default function LoginPage() {
                 }
 
                 {
-                    currState === "Sign Up" && !isSubmitted && (
+                    currState === "Sign Up" && isSubmitted && (
                         <textarea
                             onChange={(e) => setBio(e.target.value)}
                             value={bio}
