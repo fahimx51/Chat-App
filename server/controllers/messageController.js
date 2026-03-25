@@ -1,5 +1,6 @@
 import { Message } from "../models/Message";
 import { User } from "../models/User";
+import cloudinary from "../utils/cloudinary.js";
 
 //Get all users expect the logged in user
 export const getAllUsers = async (req, res) => {
@@ -62,3 +63,31 @@ export const markMessagesAsSeen = async (req, res) => {
     }
 };
 
+//Send message to selected user
+export const sendMessage = async (req, res) => {
+    try {
+        const receiverId = req.params.id;
+        const { text, image } = req.body;
+
+        let imageUrl;
+
+        if (image) {
+            const upload = await cloudinary.uploader.upload(image);
+            imageUrl = upload.secure_url;
+        }
+
+        const message = new Message({
+            senderId: req.user._id,
+            receiverId: receiverId,
+            text,
+            image: imageUrl
+        });
+
+        await message.save();
+        res.json({ success: true, message });
+    }
+    catch (error) {
+        console.log(error.message);
+        res.json({ success: false, message: error.message });
+    }
+};
