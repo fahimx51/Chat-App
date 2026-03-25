@@ -1,3 +1,4 @@
+import cloudinary from "../lib/cloudinary.js";
 import { generateToken } from "../lib/utils.js";
 import { User } from "../models/User.js";
 import bcrypt from "bcryptjs"
@@ -62,3 +63,43 @@ export const login = async (req, res) => {
         res.json({ success: false, messege: error.message });
     }
 }
+
+//Controller to check if user is authenticated
+export const checkAuth = async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.json({ success: false, messege: "Unauthorized Access" });
+        }
+
+        res.json({ success: true, user: req.user, messege: "User is authenticated" });
+    }
+    catch (error) {
+        console.log(error.message);
+        res.json({ success: false, messege: error.message });
+    }
+}
+
+//Controller to update user profile
+export const updateProfile = async (req, res) => {
+    try {
+        const { profilePic, fullName, bio } = req.body;
+        const userId = req.user._id;
+
+        let updatedUser;
+
+        if (!profilePic || profilePic === "") {
+            updatedUser = await User.findByIdAndUpdate(userId, { fullName, bio }, { new: true });
+        }
+        else {
+            const upload = await cloudinary.uploader.upload(profilePic);
+
+            updatedUser = await User.findByIdAndUpdate(userId, { fullName, bio, profilePic: upload.secure_url }, { new: true });
+        }
+
+        res.json({ success: true, user: updatedUser, messege: "Profile updated successfully" });
+    }
+    catch (error) {
+        console.log(error.message);
+        res.json({ success: false, messege: error.message });
+    }
+} 
