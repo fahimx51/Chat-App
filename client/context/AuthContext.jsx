@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import io from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 axios.defaults.baseURL = backendUrl;
@@ -14,6 +15,7 @@ export const AuthProvider = ({ children }) => {
     const [authUser, setAuthUser] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [socket, setSocket] = useState(null);
+    const navigate = useNavigate();
 
     //check if user is authenticated and if so, set user data and initialize socket connection
 
@@ -37,6 +39,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const { data } = await axios.post(`/api/auth/${state}`, credentials);
             if (data.success) {
+                console.log("Login successful:", data);
                 setToken(data.token);
                 localStorage.setItem("token", data.token);
                 setAuthUser(data.user);
@@ -75,16 +78,17 @@ export const AuthProvider = ({ children }) => {
     const updateProfile = async (updatedData) => {
         try {
             const { data } = await axios.put("/api/auth/update-profile", updatedData);
+            console.log(data);
             if (data.success) {
                 setAuthUser(data.user);
-                toast.success(data.message);
+                toast.success(data.messege);
             }
             else {
-                toast.error(data.message);
+                toast.error(data.messege);
             }
         }
         catch (error) {
-            toast.error(error.message);
+            toast.error(error.messege);
         }
     };
 

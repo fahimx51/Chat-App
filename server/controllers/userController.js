@@ -12,11 +12,11 @@ export const signup = async (req, res) => {
             return res.json({ success: false, messege: "Missing user details" });
         }
 
-        const user = User.findOne({ email });
+        const user = await User.findOne({ email });
 
-        if (user) res.json({ success: false, messege: "User already exist" });
+        if (user) return res.json({ success: false, messege: "User already exist" });
 
-        const hashedPassword = bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = await User.create({
             fullName, email, password: hashedPassword, bio
@@ -24,17 +24,18 @@ export const signup = async (req, res) => {
 
         const token = generateToken(newUser._id);
 
-        res.json({ success: true, userData: newUser, token, messege: "Account created successfully" });
+        return res.json({ success: true, userData: newUser, token, messege: "Account created successfully" });
     }
     catch (error) {
         console.log(error.message);
-        res.json({ success: false, messege: error.message });
+        return res.json({ success: false, messege: error.message });
     }
 };
 
 //controller for user login
 export const login = async (req, res) => {
     const { email, password } = req.body;
+    console.log("Login attempt with email:", email);
 
     try {
         if (!email || !password) {
