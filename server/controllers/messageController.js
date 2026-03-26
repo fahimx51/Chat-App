@@ -1,6 +1,6 @@
-import { Message } from "../models/Message";
-import { User } from "../models/User";
-import cloudinary from "../utils/cloudinary.js";
+import { Message } from "../models/Message.js";
+import { User } from "../models/User.js";
+import cloudinary from "../lib/cloudinary.js";
 import { io, userSocketMap } from "../server.js";
 
 //Get all users expect the logged in user
