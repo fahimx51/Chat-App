@@ -39,21 +39,28 @@ export const AuthProvider = ({ children }) => {
         try {
             const { data } = await axios.post(`/api/auth/${state}`, credentials);
             if (data.success) {
-                console.log("Login successful:", data);
-                setToken(data.token);
+                // 1. Save to Storage
                 localStorage.setItem("token", data.token);
-                setAuthUser(data.user);
-                connectSocket(data.user);
-                axios.defaults.headers.common["token"] = null;
-                toast.success(data.message);
+                setToken(data.token);
+
+                // 2. IMPORTANT: Update Axios Header IMMEDIATELY
+                axios.defaults.headers.common["token"] = data.token;
+
+                // 3. Update User State
+                setAuthUser(data.userData); // Make sure you use data.userData to match your backend
+
+                // 4. Connect Socket
+                connectSocket(data.userData);
+
+                toast.success(data.messege);
+
+                // 5. Navigate
+                navigate("/");
+            } else {
+                toast.error(data.messege);
             }
-            else {
-                toast.error(data.message);
-            }
-        }
-        catch (error) {
-            console.error("Login error:", error.message);
-            toast.error(error.message);
+        } catch (error) {
+            toast.error(error.response?.data?.messege || "An error occurred");
         }
     };
 
