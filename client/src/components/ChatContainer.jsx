@@ -1,8 +1,11 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import assets, { messagesDummyData } from '../assets/assets'
 import { formatMessageTime } from '../lib/utils';
+import { ChatContext } from '../../context/ChatContext';
 
-export default function ChatContainer({ selectedUser, setSelectedUser }) {
+export default function ChatContainer() {
+
+    const {selectedUser, setSelectedUser} = useContext(ChatContext);
 
     const scrollEnd = useRef();
 

@@ -5,6 +5,7 @@ import { io, userSocketMap } from "../server.js";
 
 //Get all users expect the logged in user
 export const getAllUsers = async (req, res) => {
+    console.log("Hit here--------------");
     try {
         const userId = req.user._id;
         const users = await User.find({ _id: { $ne: userId } }).select("-password");

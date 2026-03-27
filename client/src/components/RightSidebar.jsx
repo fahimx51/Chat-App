@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import assets, { imagesDummyData } from '../assets/assets'
+import { ChatContext } from '../../context/ChatContext';
 
-export default function RightSidebar({ selectedUser }) {
+export default function RightSidebar() {
+    const {selectedUser, setSelectedUser} = useContext(ChatContext);
+    
     return selectedUser && (
         <div className={`bg-[#8185B2]/10 text-white w-full relative overflow-y-scroll ${selectedUser ? "max-md:hidden" : ""}`}>
 

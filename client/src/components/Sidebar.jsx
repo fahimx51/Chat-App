@@ -3,14 +3,17 @@ import assets from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 import { userDummyData } from '../assets/assets';
 import { AuthContext } from '../../context/AuthContext';
+import { ChatContext } from '../../context/ChatContext';
 
-export default function Sidebar({ selectedUser, setSelectedUser }) {
+export default function Sidebar() {
 
     const navigate = useNavigate();
 
-    const { logout } = useContext(AuthContext);
+    const { logout, onlineUsers } = useContext(AuthContext);
 
-
+    const {getUsers, users, selectedUser, setSelectedUser, unseenMessages, setUnseenMessages} = useContext(ChatContext);
+    
+    
 
     return (
         <div className={`bg-[#8185B2]/10 h-full p-5 rounded-r-xl overflow-y-scroll text-white ${selectedUser ? "max-md:hidden" : ""}`}>

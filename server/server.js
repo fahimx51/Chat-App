@@ -56,7 +56,7 @@ app.use("/api/status", (req, res) => {
     res.send("<h1>Server is live!</h1>");
 });
 app.use("/api/auth", userRouter);
-app.use("/api/message", messageRouter);
+app.use("/api/messages", messageRouter);
 
 // connect DB
 await connectDB();
