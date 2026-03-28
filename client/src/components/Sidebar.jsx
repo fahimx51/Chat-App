@@ -70,7 +70,7 @@ export default function Sidebar() {
                             <img
                                 src={user?.profilePic || assets.avatar_icon}
                                 alt="UserImage"
-                                className='w-[35px] aspect-[1/1] rounded-full'
+                                className='w-[35px] aspect-[1/1] rounded-full object-cover'
                             />
                             <div className='flex flex-col leading-5'>
                                 <p>{user.fullName}</p>

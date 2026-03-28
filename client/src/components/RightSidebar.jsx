@@ -13,7 +13,7 @@ export default function RightSidebar() {
                 <img
                     src={selectedUser?.profilePic || assets.avatar_icon}
                     alt=""
-                    className='w-20 aspect-square rounded-full '
+                    className='w-20 aspect-square object-cover rounded-full '
                 />
                 <h1 className='px-10 text-xl font-medium mx-auto flex items-center gap-2'>
                     <p className='w-2 h-2 rounded-full bg-green-500'></p>

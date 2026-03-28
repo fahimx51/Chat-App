@@ -13,7 +13,7 @@ export const ChatProvider = ({ children }) => {
     const [unseenMessages, setUnseenMessages] = useState({}); // { userId: count }
 
 
-    const { socket} = useContext(AuthContext);
+    const { socket } = useContext(AuthContext);
 
 
     //Function to get all user data for the sidebar
@@ -94,7 +94,7 @@ export const ChatProvider = ({ children }) => {
 
     useEffect(() => {
         subscribeToMessages();
-        
+
         return () => {
             unsubscribeFromMessages();
         };
