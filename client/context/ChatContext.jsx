@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 export const ChatContext = createContext();
 
@@ -12,7 +13,7 @@ export const ChatProvider = ({ children }) => {
     const [unseenMessages, setUnseenMessages] = useState({}); // { userId: count }
 
 
-    const { socket, axios } = useContext(AuthContext);
+    const { socket} = useContext(AuthContext);
 
 
     //Function to get all user data for the sidebar
