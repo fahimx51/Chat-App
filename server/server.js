@@ -14,8 +14,7 @@ const server = http.createServer(app);
 //Initilize socket.io server
 export const io = new Server(server, {
     cors: {
-        origin: process.env.FRONTEND_URL, // Replace with your React app's URL
-        methods: ["GET", "POST", "PUT", "DELETE"],
+        origin: "*", // Replace with your React app's URL
         credentials: true
     }
 });
@@ -35,7 +34,7 @@ io.on("connection", (socket) => {
 
     //Emit online users to all clients
     io.emit("online-users", Array.from(userSocketMap.keys()));
-    
+
     socket.on("message-seen-instant", ({ senderId, receiverId }) => {
         // Find the original sender's socket
         const senderSocketId = userSocketMap.get(senderId);
@@ -56,7 +55,7 @@ io.on("connection", (socket) => {
 //middleware setup
 app.use(express.json({ limit: "4mb" }));
 app.use(cors({
-    origin: process.env.FRONTEND_URL, // Replace with your React app's URL
+    origin: "*", // Replace with your React app's URL
     credentials: true
 }));
 
