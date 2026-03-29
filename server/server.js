@@ -35,6 +35,15 @@ io.on("connection", (socket) => {
 
     //Emit online users to all clients
     io.emit("online-users", Array.from(userSocketMap.keys()));
+    
+    socket.on("message-seen-instant", ({ senderId, receiverId }) => {
+        // Find the original sender's socket
+        const senderSocketId = userSocketMap.get(senderId);
+        if (senderSocketId) {
+            // Tell them that the receiver (receiverId) saw the message
+            io.to(senderSocketId).emit("messages-seen", { seenBy: receiverId });
+        }
+    });
 
     socket.on("disconnect", () => {
         console.log(`User disconnected: ${userId}`);

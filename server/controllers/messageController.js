@@ -42,12 +42,22 @@ export const getMessages = async (req, res) => {
             ]
         }).sort({ createdAt: 1 });
 
-        await Message.updateMany({ senderId: selectedUserId, receiverId: userId, seen: false }, { $set: { seen: true } });
+        // 1. Update the database (You have this)
+        await Message.updateMany(
+            { senderId: selectedUserId, receiverId: userId, seen: false },
+            { $set: { seen: true } }
+        );
+
+        // 2. THE FIX: Notify the SENDER via Socket
+        const senderSocketId = userSocketMap.get(selectedUserId);
+        if (senderSocketId) {
+            // Tell the sender: "The person you sent msgs to (userId) just saw them"
+            io.to(senderSocketId).emit("messages-seen", { seenBy: userId });
+        }
 
         res.json({ success: true, messages });
     }
     catch (error) {
-        console.log(error.message);
         res.json({ success: false, messege: error.message });
     }
 };

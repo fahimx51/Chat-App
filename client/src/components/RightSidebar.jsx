@@ -1,10 +1,21 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import assets, { imagesDummyData } from '../assets/assets'
 import { ChatContext } from '../../context/ChatContext';
+import { AuthContext } from '../../context/AuthContext';
 
 export default function RightSidebar() {
-    const {selectedUser, setSelectedUser} = useContext(ChatContext);
-    
+    const { selectedUser, messages } = useContext(ChatContext);
+    const { logout, onlineUsers } = useContext(AuthContext);
+    const [msgImage, setMsgImage] = useState(null);
+
+    useEffect(() => {
+        setMsgImage(messages.filter(msg => msg.image).map(msg => msg.image));
+    }, [messages]);
+
+    const handleLogout = () => {
+        logout();
+    }
+
     return selectedUser && (
         <div className={`bg-[#8185B2]/10 text-white w-full relative overflow-y-scroll ${selectedUser ? "max-md:hidden" : ""}`}>
 
@@ -16,7 +27,7 @@ export default function RightSidebar() {
                     className='w-20 aspect-square object-cover rounded-full '
                 />
                 <h1 className='px-10 text-xl font-medium mx-auto flex items-center gap-2'>
-                    <p className='w-2 h-2 rounded-full bg-green-500'></p>
+                    {onlineUsers.includes(selectedUser._id) && <p className='w-2 h-2 rounded-full bg-green-500'></p>}
                     {selectedUser.fullName}
                 </h1>
                 <p className='px-10 mx-auto'>
@@ -30,20 +41,22 @@ export default function RightSidebar() {
                 <p>Media</p>
                 <div className='mt-2 max-h-110 overflow-y-scroll grid grid-cols-2 gap-4 opacity-80'>
                     {
-                        imagesDummyData.map((url, index) => (
+                        msgImage?.map((url, index) => (
                             <div
                                 key={index}
                                 onClick={() => window.open(url)}
                                 className='cursor-pointer rounded'
                             >
-                                <img src={url} alt="" className='h-full rounded-md' />
+                                <img src={url} alt="" className='h-full object-cover rounded-md' />
 
                             </div>
                         ))}
                 </div>
             </div>
 
-            <button className='absolute bottom-5 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-400 to-violet-600 text-white border-none text-sm font-light py-2 px-20 rounded-full cursor-pointer'>
+            <button
+                onClick={handleLogout}
+                className='absolute bottom-5 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-400 to-violet-600 text-white border-none text-sm font-light py-2 px-20 rounded-full cursor-pointer'>
                 Logout
             </button>
         </div>
